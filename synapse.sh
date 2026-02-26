@@ -1,61 +1,34 @@
 #!/bin/bash
-# MNEMOSYNE CORE - SYNAPSE INITIALIZATION
-# "The Brain to the Machine"
+# MNEMOSYNE CORE - SPRINT 1.2 (The Router)
 
-echo "Firing synapses... Building project structure."
-
-# 1. Create Memory Vault (ai.md)
-echo "# Mnemosyne Core: Project Memory Vault
-## User Profile: Jamey McElveen
-- **Persona:** Senior Architect (est. 1996), 6'5\", 344 lbs, 52 yrs.
-- **Goal:** Health for grandkids, retirement on GA river.
-- **Style:** Dracula Sneeze (Discreet, Efficient).
-
-## Established Vernacular
-- 'Same': Repeat last set/reps/weight.
-- 'Up [X]': Increment weight.
-- '3x8@100': Standard log format." > ai.md
-
-# 2. Create Data Schema (schema.json)
-echo '{
-  "user_id": "jameymcelveen",
-  "preferences": {
-    "units": "imperial",
-    "interaction_mode": "discreet"
+# 1. Create a Mock Database of your gym machines
+echo '[
+  {
+    "nfc_id": "tag_001",
+    "name": "Indoor Cycle",
+    "last_weight": 0,
+    "last_reps": 0,
+    "unit": "level"
   },
-  "shorthand_map": {
-    "same": "repeat_last",
-    "up": "increment_weight"
-  },
-  "history": []
-}' > schema.json
-
-# 3. Create Core Engine Logic (engine.ts)
-echo "/**
- * Mnemosyne Engine: The 'Invisible Coach' Logic
- */
-export function processNfcCommand(input: string, lastLog: any) {
-  const command = input.toLowerCase().trim();
-  
-  if (command === 'same') {
-    return { ...lastLog, date: new Date().toISOString(), status: 'repeated' };
+  {
+    "nfc_id": "tag_002",
+    "name": "Lat Pulldown",
+    "last_weight": 100,
+    "last_reps": 8,
+    "unit": "lbs"
   }
-  
-  if (command.startsWith('up')) {
-    const amount = parseInt(command.replace('up', '').trim()) || 5;
-    return { 
-      ...lastLog, 
-      weight: lastLog.weight + amount,
-      date: new Date().toISOString(),
-      status: 'incremented'
-    };
-  }
-  return null;
-}" > engine.ts
+]' > db.json
 
-# 4. Create README
-echo "# Mnemosyne Core
-Built for the 'Digital Mom & Pop' life.
-Invisible coaching via NFC and AI logic." > README.md
+# 2. Create the Router Logic
+echo "import { processNfcCommand } from './engine';
+import db from './db.json';
 
-echo "Synapses fired. Files created. You're clear to rest, Jamey."
+export function handleTap(nfcId: string, command: string) {
+  const machine = db.find(m => m.nfc_id === nfcId);
+  if (!machine) return 'Machine not found. Want to register it?';
+
+  const result = processNfcCommand(command, { weight: machine.last_weight });
+  return \`Logged \${machine.name}: \${result.weight} \${machine.unit}\`;
+}" > router.ts
+
+echo "Router and Mock DB added. The 'Invisible Coach' can now see the machines."

@@ -1,0 +1,16 @@
+[
+  {
+    "nfc_id": "tag_001",
+    "name": "Indoor Cycle",
+    "last_weight": 0,
+    "last_reps": 0,
+    "unit": "level"
+  },
+  {
+    "nfc_id": "tag_002",
+    "name": "Lat Pulldown",
+    "last_weight": 100,
+    "last_reps": 8,
+    "unit": "lbs"
+  }
+]
