@@ -1,20 +1,29 @@
-#!/bin/bash
-# MNEMOSYNE CORE - SPRINT 1.6 (The GitHub Guard)
+-- Mnemosyne Core: Database Schema v1.0
+-- Focus: Longevity and Minimalist Interaction
 
-mkdir -p .github/workflows
+CREATE TABLE profiles (
+  id UUID REFERENCES auth.users ON DELETE CASCADE,
+  full_name TEXT,
+  height_inches INT DEFAULT 77, -- 6'5" default for the Architect
+  weight_lbs FLOAT,
+  goal_metric TEXT DEFAULT 'legacy_time',
+  PRIMARY KEY (id)
+);
 
-echo "name: Mnemosyne CI
-on: [push]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-      - run: npm install
-      - run: npm test" > .github/workflows/ci.yml
+CREATE TABLE machines (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  nfc_id TEXT UNIQUE NOT NULL,
+  machine_name TEXT NOT NULL,
+  category TEXT DEFAULT 'strength', -- strength vs cardio
+  base_increment FLOAT DEFAULT 5.0
+);
 
-echo "CI Pipeline created. GitHub will now run your tests automatically on every push."
+CREATE TABLE workout_logs (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id),
+  machine_id UUID REFERENCES machines(id),
+  weight_used FLOAT,
+  reps_completed INT,
+  heart_rate_avg INT, -- Fed from Apple Watch
+  created_at TIMESTAMPTZ DEFAULT now()
+);
