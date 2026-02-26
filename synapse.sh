@@ -1,29 +1,23 @@
--- Mnemosyne Core: Database Schema v1.0
--- Focus: Longevity and Minimalist Interaction
+#!/bin/bash
+# MNEMOSYNE CORE - SPRINT 1.7 (Cloud Persistence)
 
-CREATE TABLE profiles (
-  id UUID REFERENCES auth.users ON DELETE CASCADE,
-  full_name TEXT,
-  height_inches INT DEFAULT 77, -- 6'5" default for the Architect
-  weight_lbs FLOAT,
-  goal_metric TEXT DEFAULT 'legacy_time',
-  PRIMARY KEY (id)
+# 1. Add the Database Connection logic to engine.ts
+echo "
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase (Variables will come from Railway)
+const supabase = createClient(
+  process.env.SUPABASE_URL || '',
+  process.env.SUPABASE_ANON_KEY || ''
 );
 
-CREATE TABLE machines (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  nfc_id TEXT UNIQUE NOT NULL,
-  machine_name TEXT NOT NULL,
-  category TEXT DEFAULT 'strength', -- strength vs cardio
-  base_increment FLOAT DEFAULT 5.0
-);
+export async function saveWorkout(log: any) {
+  const { data, error } = await supabase
+    .from('workout_logs')
+    .insert([log]);
+    
+  if (error) console.error('Error saving to Supabase:', error);
+  return data;
+}" >> engine.ts
 
-CREATE TABLE workout_logs (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES profiles(id),
-  machine_id UUID REFERENCES machines(id),
-  weight_used FLOAT,
-  reps_completed INT,
-  heart_rate_avg INT, -- Fed from Apple Watch
-  created_at TIMESTAMPTZ DEFAULT now()
-);
+echo "Cloud persistence logic added. The 'Invisible Coach' now has a permanent memory."

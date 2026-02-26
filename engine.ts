@@ -47,3 +47,20 @@ export function coachAdvice(currentHeartRate: number, requestedCommand: string) 
   }
   return { override: requestedCommand, message: 'Let\'s get it!' };
 }
+
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase (Variables will come from Railway)
+const supabase = createClient(
+  process.env.SUPABASE_URL || '',
+  process.env.SUPABASE_ANON_KEY || ''
+);
+
+export async function saveWorkout(log: any) {
+  const { data, error } = await supabase
+    .from('workout_logs')
+    .insert([log]);
+    
+  if (error) console.error('Error saving to Supabase:', error);
+  return data;
+}
