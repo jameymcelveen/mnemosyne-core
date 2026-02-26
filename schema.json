@@ -1,0 +1,12 @@
+{
+  "user_id": "jameymcelveen",
+  "preferences": {
+    "units": "imperial",
+    "interaction_mode": "discreet"
+  },
+  "shorthand_map": {
+    "same": "repeat_last",
+    "up": "increment_weight"
+  },
+  "history": []
+}
