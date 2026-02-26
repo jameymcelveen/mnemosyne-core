@@ -1,11 +1,15 @@
 {
   "name": "mnemosyne-core",
-  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "test": "vitest run"
+    "welcome": "node scripts/welcome.js",
+    "test": "npm test --workspaces"
   },
   "devDependencies": {
-    "vitest": "^0.34.0",
-    "typescript": "^5.0.0"
+    "chalk": "^4.1.2"
   }
 }
