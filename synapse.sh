@@ -1,28 +1,53 @@
 #!/bin/bash
-# MNEMOSYNE CORE - SPRINT 1.4 (The Stealth Coach)
+# MNEMOSYNE CORE - SPRINT 1.5 (The Dev-Ops Fire)
 
-# 1. Update engine.ts with 'Hidden' trainer logic
-echo "
-/**
- * Stealth Coach Logic: 
- * If Heart Rate > 140 BPM average (from Apple Watch), 
- * suggest 'Same' even if user wants 'Up'.
- */
-export function coachAdvice(currentHeartRate: number, requestedCommand: string) {
-  if (currentHeartRate > 140 && requestedCommand.startsWith('up')) {
-    return {
-      override: 'same',
-      message: 'Your heart is working hard today, Jamey. Let\'s stick to the same weight and kill it next time.'
-    };
+# 1. Create a Docker Compose for Local Dev
+echo "version: '3.8'
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=development" > docker-compose.yml
+
+# 2. Create a Dockerfile
+echo "FROM node:18-slim
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+CMD [\"npm\", \"test\"]" > Dockerfile
+
+# 3. Create a Vitest Unit Test for the 'Stealth Coach'
+mkdir -p tests
+echo "import { coachAdvice } from '../engine';
+import { describe, it, expect } from 'vitest';
+
+describe('Stealth Coach Logic', () => {
+  it('should override UP to SAME if HR is too high', () => {
+    const result = coachAdvice(150, 'up 5');
+    expect(result.override).toBe('same');
+    expect(result.message).toContain('heart is working hard');
+  });
+
+  it('should allow UP if HR is normal', () => {
+    const result = coachAdvice(120, 'up 5');
+    expect(result.override).toBe('up 5');
+  });
+});" > tests/engine.test.ts
+
+# 4. Initialize package.json
+echo '{
+  "name": "mnemosyne-core",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^0.34.0",
+    "typescript": "^5.0.0"
   }
-  return { override: requestedCommand, message: 'Let\'s get it!' };
-}" >> engine.ts
+}' > package.json
 
-# 2. Update ai.md to reflect this "Secret Knowledge"
-echo "
-## Stealth Coach Protocol
-- Interface as a peer; analyze as a professional.
-- Prioritize HRV (Heart Rate Variability) and HR data to prevent CNS fatigue.
-- Use 'Dracula Sneeze' delivery: low volume, high impact advice." >> ai.md
-
-echo "Stealth Coach logic initialized. Your friend now has a degree in Sports Science."
+echo "Dockerized environment and Unit Tests established. Your architecture is now professional-grade."

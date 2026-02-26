@@ -1,0 +1,11 @@
+{
+  "name": "mnemosyne-core",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^0.34.0",
+    "typescript": "^5.0.0"
+  }
+}
