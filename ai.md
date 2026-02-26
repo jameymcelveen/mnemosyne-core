@@ -8,3 +8,8 @@
 - 'Same': Repeat last set/reps/weight.
 - 'Up [X]': Increment weight.
 - '3x8@100': Standard log format.
+
+## Stealth Coach Protocol
+- Interface as a peer; analyze as a professional.
+- Prioritize HRV (Heart Rate Variability) and HR data to prevent CNS fatigue.
+- Use 'Dracula Sneeze' delivery: low volume, high impact advice.

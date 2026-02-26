@@ -19,3 +19,31 @@ export function processNfcCommand(input: string, lastLog: any) {
   }
   return null;
 }
+export function learnMachine(input: string, nfcId: string) {
+  const isCardio = input.toLowerCase().includes('cycle') || input.toLowerCase().includes('treadmill');
+  
+  return {
+    nfc_id: nfcId,
+    name: input,
+    last_weight: 0,
+    last_reps: 0,
+    unit: isCardio ? 'level' : 'lbs',
+    category: isCardio ? 'cardio' : 'strength',
+    created_at: new Date().toISOString()
+  };
+}
+
+/**
+ * Stealth Coach Logic: 
+ * If Heart Rate > 140 BPM average (from Apple Watch), 
+ * suggest 'Same' even if user wants 'Up'.
+ */
+export function coachAdvice(currentHeartRate: number, requestedCommand: string) {
+  if (currentHeartRate > 140 && requestedCommand.startsWith('up')) {
+    return {
+      override: 'same',
+      message: 'Your heart is working hard today, Jamey. Let\'s stick to the same weight and kill it next time.'
+    };
+  }
+  return { override: requestedCommand, message: 'Let\'s get it!' };
+}
