@@ -7,7 +7,8 @@
   ],
   "scripts": {
     "welcome": "node scripts/welcome.js",
-    "test": "npm test --workspaces"
+    "test": "npm test --workspaces",
+    "scrub": "node scripts/scrub.js"
   },
   "devDependencies": {
     "chalk": "^4.1.2"
