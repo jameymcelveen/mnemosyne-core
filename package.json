@@ -8,7 +8,8 @@
   "scripts": {
     "welcome": "node scripts/welcome.js",
     "test": "npm test --workspaces",
-    "scrub": "node scripts/scrub.js"
+    "scrub": "node scripts/scrub.js",
+    "generate": "node scripts/scaffold.js"
   },
   "devDependencies": {
     "chalk": "^4.1.2"
